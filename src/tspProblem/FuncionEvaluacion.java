@@ -11,27 +11,23 @@ public class FuncionEvaluacion extends EvaluationFunction {
     public static double calcularCoste(Ciudad origen, Ciudad destino) {
 
         // Solución euclidea
-        // double costeTotal = Math.sqrt(Math.pow(origen.getX() - destino.getX(), 2) + Math.pow(origen.getY() - destino.getY(), 2));
+         double costeTotal = Math.sqrt(Math.pow(origen.getX() - destino.getX(), 2) + Math.pow(origen.getY() - destino.getY(), 2));
 
         //Solución manhatam
         //double costeTotal = Math.abs(origen.getX()-destino.getX())+Math.abs(origen.getY()-destino.getY());
-        double costeTotal = Math.max(Math.abs(origen.getX()-destino.getX()),Math.abs(origen.getY()-destino.getY()));
         return costeTotal;
 
     }
 
     /**
-     * Suma el coste de todos los nodos hasta el actual
+     * Suma el coste de todos los nodos hasta el actual, el último nodo
      *
      * @param node
      * @return
      */
     @Override
     public double calculateG(Node node) {
-        double costeGTotal = 0;
-        for (int i = 0; i < node.getDepth(); i++)
-            costeGTotal = +node.getG();
-        System.out.println("Calculo G: " + costeGTotal);
+        double costeGTotal = node.getParent().getG()+calcularCoste(((EnvironmentMap)node.getParent().getState()).getActual(), ((EnvironmentMap)node.getState()).getActual());
         return costeGTotal;
     }
 
@@ -43,11 +39,10 @@ public class FuncionEvaluacion extends EvaluationFunction {
      */
     @Override
     public double calculateH(Node node) {
-    /*    EnvironmentMap environment = (EnvironmentMap) node.getState();
+       EnvironmentMap environment = (EnvironmentMap) node.getState();
         Ciudad actual = environment.getPosicionActual();
         return calcularCoste(actual, environment.getDestino());
-     */
-        return 0;
+
     }
     public static void main(String [] args)
     {

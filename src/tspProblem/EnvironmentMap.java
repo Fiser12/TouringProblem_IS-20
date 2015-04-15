@@ -153,4 +153,8 @@ public class EnvironmentMap extends State implements Cloneable {
     public void setOrigen(Ciudad origen) {
         this.origen = origen;
     }
+    public Ciudad getActual()
+    {
+        return recorrida.get(recorrida.size()-1);
+    }
 }

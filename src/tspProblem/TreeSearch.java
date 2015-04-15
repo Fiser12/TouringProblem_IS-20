@@ -5,7 +5,6 @@ package tspProblem;
  */
 
 import es.deusto.ingenieria.is.search.algorithms.Node;
-import es.deusto.ingenieria.is.search.algorithms.heuristic.EvaluationFunction;
 import es.deusto.ingenieria.is.search.algorithms.heuristic.HeuristicSearchMethod;
 import es.deusto.ingenieria.is.search.formulation.Operator;
 import es.deusto.ingenieria.is.search.formulation.Problem;
@@ -22,7 +21,7 @@ public class TreeSearch extends HeuristicSearchMethod {
          * Constructor method.
          * @param function evaluation function to be used by Best First Search.
          */
-        public TreeSearch(EvaluationFunction function){
+        public TreeSearch(FuncionEvaluacion function){
             super(function);
         }
 
@@ -150,8 +149,6 @@ public class TreeSearch extends HeuristicSearchMethod {
                     }
                 }
             }
-
             return successorNodes;
         }
-
 }

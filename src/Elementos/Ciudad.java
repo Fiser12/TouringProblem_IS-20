@@ -18,7 +18,11 @@ public class Ciudad implements Cloneable {
         this.y = y;
         this.destinos = destinos;
     }
-
+    public Ciudad(String punto, int x, int y) {
+        this.punto = punto;
+        this.x = x;
+        this.y = y;
+    }
     /**
      * devuelve x
      *
@@ -45,7 +49,10 @@ public class Ciudad implements Cloneable {
     public String getPunto() {
         return punto;
     }
-
+    public void setPunto(String punto)
+    {
+        this.punto = punto;
+    }
     /**
      * clona la ciudad correctamente y la devuelve
      *
@@ -65,6 +72,15 @@ public class Ciudad implements Cloneable {
         return clon;
     }
 
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setX(int x) {
+
+        this.x = x;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,6 +90,7 @@ public class Ciudad implements Cloneable {
         //Comparamos los enteros porque es más rápido que comparar un String
         if (x != ciudad.x) return false;
         if (y != ciudad.y) return false;
+        if (!punto.equals(ciudad.getPunto())) return false;
 
         return true;
     }

@@ -2,7 +2,6 @@ package tspProblem; /**
  * Created by Fiser on 23/2/15.
  */
 
-import Actions.Move;
 import Elementos.Ciudad;
 import es.deusto.ingenieria.is.search.algorithms.Node;
 import es.deusto.ingenieria.is.search.algorithms.SearchMethod;
@@ -27,54 +26,28 @@ public class TouringProblem extends Problem {
         addInitialState(state); //Añade el estado incial al problema
         this.createOperators();
     }
-
-    public static void main(String[] args) {
-        testUnitarioIsFinalState();
-        testUnitarioCreateOperators();
-    }
-
-    //Comprobamos que el isFinalState funcione, solo tenemos que pasarle un estado que sea valido para hacer dicha comprobación
-    public static void testUnitarioIsFinalState() {
-        TouringProblem problema = new TouringProblem();
-        EnvironmentMap state = (EnvironmentMap) problema.gatherInitialPercepts(); //Carga el estado incial
-        state.setRecorrida(state.getLista());
-        System.out.println("El estado es final: " + problema.isFinalState(state));
-    }
-
-    //Comprobamos que el CreateOperators se ejecute sin lanzar ninguna excepción, además también estamos comprobando el gatherInitialPercepts
-    public static void testUnitarioCreateOperators() {
-        TouringProblem problema = new TouringProblem();
-        EnvironmentMap state = (EnvironmentMap) problema.gatherInitialPercepts(); //Carga el estado incial
-        problema.addInitialState(state); //Añade el estado incial al problema
-        problema.createOperators();
-        System.out.println("Se han creado todos los operadores sin excepciones");
-    }
-
     /**
      * se encarga de incializar el estado inicial en función del XML tourProblem.xml
      *
      * @return
      */
-    public State gatherInitialPercepts() {
+    public State gatherInitialPercepts()
+    {
         StateXMLReader stateXMLReader = new MapReader("data/tourProblem.xml");
         EnvironmentMap estado = (EnvironmentMap) stateXMLReader.getState();
         return estado;
     }
 
-    private void createOperators() {
-        ArrayList<Move> temporal = new ArrayList<Move>();
+    public void createOperators() {
         EnvironmentMap inicial = ((EnvironmentMap) gatherInitialPercepts());
-        for (Ciudad ciudad : inicial.getLista()) {
-            if(!inicial.getPosicionActual().equals(ciudad))//No necesitamos ir al estado en el que ya nos encontramos
-                temporal.add(new Move(ciudad));
-            //      this.addOperator(new Move(ciudad));
-        }
-        java.util.Collections.shuffle(temporal);
-        for (Move move : temporal) {
-            this.addOperator(move);
-        }
+        ArrayList<Ciudad> lista = inicial.getLista();
+        ArrayList<Move> operadores = new ArrayList<Move>();
+        for(int i = 1; i<lista.size()-1; i++)
+            for(int j = i+1; j<lista.size()-1; j++)
+            	operadores.add(new Move(lista.get(i), lista.get(j)));
+        for(Move move: operadores)
+        	this.addOperator(move);
     }
-
     public void solve(SearchMethod searchMethod) {
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss.S");
         Date beginDate = GregorianCalendar.getInstance().getTime();
@@ -92,7 +65,7 @@ public class TouringProblem extends Problem {
         long hours = minutes / 60;
         minutes %= 60;
 
-        String time = "\n* Serach lasts: ";
+        String time = "\n*  Serach lasts: ";
         time += (hours > 0) ? hours + " h " : " ";
         time += (minutes > 0) ? minutes + " m " : " ";
         time += (seconds > 0) ? seconds + "s " : " ";
@@ -108,23 +81,6 @@ public class TouringProblem extends Problem {
             System.out.println("- Final state:\n" + finalNode.getState());
         } else {
             System.out.println("\n- Unable to find the solution!     :(");
-        }
-    }
-
-    public boolean isFinalState(State state) {
-        if (state != null && state != null && state instanceof EnvironmentMap) {
-            EnvironmentMap queenEnv = (EnvironmentMap) state;
-            ArrayList<Ciudad> lista = queenEnv.getRecorrida();
-
-            boolean esFinal = lista.containsAll(((EnvironmentMap) state).getLista());
-
-            if ((((EnvironmentMap) state).getPosicionActual().equals(((EnvironmentMap) state).getDestino())))
-                esFinal = esFinal && true;
-            else
-                esFinal = esFinal && false;
-            return esFinal;
-        } else {
-            return false;
         }
     }
 }

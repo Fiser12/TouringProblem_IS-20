@@ -25,10 +25,12 @@ public class MapReader extends StateXMLReader {
      */
     @Override
     public State getState() {
+        //Al hacer el shuffle aquí cambiamos el orden de la lista tanto para cargar los operadores, luego garantizamos el desorden de los mismos como para la lista de ciudades que cargamos
+        java.util.Collections.shuffle(lista);
+        lista.add(destino);
+        lista.add(0, inicio);
         return new EnvironmentMap(lista, destino, inicio);
     }
-
-
     /**
      * Se encarga a través de los parametros de sacar cada elemento del xml y procesarlo para cargar los datos.
      *
@@ -36,7 +38,7 @@ public class MapReader extends StateXMLReader {
      * @param localName
      * @param qName
      * @param attributes
-     * @throws SAXException
+     * @throws org.xml.sax.SAXException
      */
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -47,11 +49,9 @@ public class MapReader extends StateXMLReader {
                 lista.add(new Ciudad(attributes.getValue("name"), Integer.parseInt(attributes.getValue("x")), Integer.parseInt(attributes.getValue("y")), lista)); //Dado que todos los destinos posibles son todas las listas, lo hacemos así
             else if (qName.equals("is:start")) {
                 Ciudad añadir = new Ciudad(attributes.getValue("name"), Integer.parseInt(attributes.getValue("x")), Integer.parseInt(attributes.getValue("y")), lista);
-                lista.add(añadir);
                 inicio = añadir;
             } else if (qName.equals("is:end")) {
                 Ciudad añadir = new Ciudad(attributes.getValue("name"), Integer.parseInt(attributes.getValue("x")), Integer.parseInt(attributes.getValue("y")), lista);
-                lista.add(añadir);
                 destino = añadir;
             }
         } catch (Exception ex) {

@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="lib">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/is-search-algorithms-15.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/is-search-formulation-15.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/is-search-algorithms-15.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

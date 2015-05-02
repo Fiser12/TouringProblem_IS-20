@@ -12,10 +12,8 @@ import java.util.ArrayList;
  */
 public class EnvironmentMap extends State implements Cloneable {
     private ArrayList<Ciudad> lista;
-    private ArrayList<Ciudad> recorrida;
     private Ciudad destino;
-    private Ciudad origen;
-
+    private Ciudad inicial;
 
     /**
      * 6
@@ -25,20 +23,19 @@ public class EnvironmentMap extends State implements Cloneable {
      */
     public EnvironmentMap(ArrayList<Ciudad> lista, Ciudad destino, Ciudad origen) {
         this.lista = lista;
-        this.recorrida = new ArrayList<Ciudad>();
-        this.recorrida.add(origen);
         this.destino = destino;
-        this.origen = origen;
+        this.inicial = origen;
     }
 
-    /**
-     * Devuelve la posición en la que nos encontramos en el estado
-     *
-     * @return
-     */
-    public Ciudad getPosicionActual() {
+    public static double calcularCoste(Ciudad origen, Ciudad destino) {
 
-        return recorrida.get(recorrida.size() - 1);
+        // Solución euclidea
+        double costeTotal = Math.sqrt(Math.pow(origen.getX() - destino.getX(), 2) + Math.pow(origen.getY() - destino.getY(), 2));
+
+        //Solución manhatam
+        //double costeTotal = Math.abs(origen.getX()-destino.getX())+Math.abs(origen.getY()-destino.getY());
+        return costeTotal;
+
     }
 
 
@@ -66,39 +63,44 @@ public class EnvironmentMap extends State implements Cloneable {
      * Convierte a String el estado actual
      */
     public String toString() {
-        String cadena = "Actual: " + recorrida.get(recorrida.size() - 1) + " Rec: [";
+        String cadena = "";
         double coste = 0;
-        for (Ciudad c : recorrida) {
+        for (Ciudad c : lista) {
             cadena = cadena + c.toString();
         }
         cadena = cadena + "]";
-        for (int i = 0; i < recorrida.size() - 1; i++) {
-            coste = coste + FuncionEvaluacion.calcularCoste(recorrida.get(i), recorrida.get(i + 1));
+        for (int i = 0; i < lista.size() - 1; i++) {
+            coste = coste + calcularCoste(lista.get(i), lista.get(i + 1));
         }
         cadena = cadena + "Coste: " + coste + "\n";
         return cadena;
     }
 
+
     @Override
-    /**
-     * Comprueba si el objeto State que le pasamos es igual que este objeto
-     */
     public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
         EnvironmentMap that = (EnvironmentMap) o;
 
-        if (recorrida != null ? !recorrida.equals(that.recorrida) : that.recorrida != null) return false;
+        if (destino != null ? !destino.equals(that.destino) : that.destino != null) return false;
+        if (inicial != null ? !inicial.equals(that.inicial) : that.inicial != null) return false;
+        if (lista != null ? !lista.equals(that.lista) : that.lista != null) return false;
 
         return true;
     }
 
-    /**
-     * Permite añadir una ciudad a las recorridas
-     *
-     * @param añadir
-     */
-    public void addRecorrido(Ciudad añadir) {
-        recorrida.add(añadir);
+    @Override
+    public int hashCode() {
+        int result = lista != null ? lista.hashCode() : 0;
+        result = 31 * result + (destino != null ? destino.hashCode() : 0);
+        result = 31 * result + (inicial != null ? inicial.hashCode() : 0);
+        return result;
     }
+
+    @Override
+
 
     /**
      * Permite generar un clonado del objeto
@@ -111,50 +113,12 @@ public class EnvironmentMap extends State implements Cloneable {
             clon = (EnvironmentMap) super.clone();
             clon.lista = this.lista;
             ArrayList<Ciudad> recorridas = new ArrayList<Ciudad>();
-            for (Ciudad procesar : this.recorrida)
+            for (Ciudad procesar : this.lista)
                 recorridas.add(procesar);
-            clon.recorrida = recorridas;
+            clon.lista = recorridas;
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
         return clon;
-    }
-
-    /**
-     * Devolvemos la lista de ciudades recorridas hasta el momento
-     *
-     * @return
-     */
-    public ArrayList<Ciudad> getRecorrida() {
-        return recorrida;
-    }
-
-    /**
-     * Cargamos la lista de ciudades recorridas
-     *
-     * @param recorrida
-     */
-    public void setRecorrida(ArrayList<Ciudad> recorrida) {
-        this.recorrida = recorrida;
-    }
-
-    public Ciudad getDestino() {
-        return destino;
-    }
-
-    public void setDestino(Ciudad destino) {
-        this.destino = destino;
-    }
-
-    public Ciudad getOrigen() {
-        return origen;
-    }
-
-    public void setOrigen(Ciudad origen) {
-        this.origen = origen;
-    }
-    public Ciudad getActual()
-    {
-        return recorrida.get(recorrida.size()-1);
     }
 }

@@ -4,7 +4,6 @@ import Elementos.Ciudad;
 import es.deusto.ingenieria.is.search.formulation.Operator;
 import es.deusto.ingenieria.is.search.formulation.State;
 
-
 /**
  * Created by Fiser on 23/2/15.
  */
@@ -47,12 +46,12 @@ public class Move extends Operator {
                 {
                     Ciudad procesar2 = ((EnvironmentMap) state).getLista().get(j);
                     if (procesar2.equals(destino)) {
-                        ((EnvironmentMap) estadoClon).getLista().set(j, procesar);
-                        ((EnvironmentMap) estadoClon).getLista().set(i, procesar2);
+                        java.util.Collections.swap(estadoClon.getLista(), i, j);
                     }
                 }
             }
         }
+
         return estadoClon;
     }
 }
